@@ -1,17 +1,17 @@
-import uuidv4 from 'uuid/v4';
-import { Router as expressRouter } from 'express';
+import uuidv4 from "uuid/v4";
+import { Router as expressRouter } from "express";
 
 const router = expressRouter();
 
-router.get('/', (req, res) => {
-  return res.send(Object.values(req.context.models.messages));
+router.get("/", (req, res) => {
+  return res.send("h");
 });
 
-router.get('/:messageId', (req, res) => {
+router.get("/:messageId", (req, res) => {
   return res.send(req.context.models.messages[req.params.messageId]);
 });
 
-router.post('/', (req, res) => {
+router.post("/", (req, res) => {
   const id = uuidv4();
   const message = {
     id,
@@ -24,8 +24,11 @@ router.post('/', (req, res) => {
   return res.send(message);
 });
 
-router.delete('/:messageId', (req, res) => {
-  const { [req.params.messageId]: message, ...otherMessages } = req.context.models.messages;
+router.delete("/:messageId", (req, res) => {
+  const {
+    [req.params.messageId]: message,
+    ...otherMessages
+  } = req.context.models.messages;
 
   req.context.models.messages = otherMessages;
 

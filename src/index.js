@@ -6,6 +6,7 @@ import errorHandler from "errorhandler";
 import routes from "./routes";
 import initDbStartUp from "../init";
 import { validateUser } from "../utils";
+import controllers from "./controllers";
 
 // Configure isProduction variable
 const isProduction = conf.NODE_ENV === "production";
@@ -25,7 +26,9 @@ initDbStartUp().then(() => {
   });
 
   // test App
-  app.get("/", (req, res) => res.send("How did you get here?"));
+  app.get("/status", controllers.statusController);
+  app.get("/checkEmail", controllers.checkEmailController);
+
 
   app.use("/auth", routes.auth);
   app.use("/session", routes.session);
@@ -42,21 +45,6 @@ initDbStartUp().then(() => {
       validateUser
     )
   );
-
-  if (!isProduction) {
-    app.use(errorHandler());
-
-    app.use((err, req, res) => {
-      res.status(err.status || 500);
-
-      res.json({
-        errors: {
-          message: err.message,
-          error: err
-        }
-      });
-    });
-  }
 
   app.listen(process.env.PORT, () =>
     Logger.info(`Techist App is listening on port ${process.env.PORT}!`)

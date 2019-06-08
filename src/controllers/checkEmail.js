@@ -1,5 +1,6 @@
 const checkEmailController = (request, response) => {
-  console.log(request);
+  const { email } = request.params;
+
   response.send({
     flag: "ok",
     message: "checking",

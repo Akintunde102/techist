@@ -1,3 +1,3 @@
-import Users from "./users";
+import UserModel from "./users";
 
-export default { Users };
+export default { UserModel };

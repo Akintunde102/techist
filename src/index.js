@@ -2,16 +2,14 @@ import express from "express";
 import passport from "passport";
 import LocalStrategy from "passport-local";
 import cors from "cors";
-import errorHandler from "errorhandler";
 import routes from "./routes";
-import initDbStartUp from "../init";
+import { initDbStartUp, addAdmin } from "../init";
 import { validateUser } from "../utils";
 import controllers from "./controllers";
 
-// Configure isProduction variable
-const isProduction = conf.NODE_ENV === "production";
-
 initDbStartUp().then(() => {
+  addAdmin();
+
   const app = express();
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
@@ -27,8 +25,7 @@ initDbStartUp().then(() => {
 
   // test App
   app.get("/status", controllers.statusController);
-  app.get("/checkEmail", controllers.checkEmailController);
-
+  app.get("/checkEmail/:email", controllers.checkEmailController);
 
   app.use("/auth", routes.auth);
   app.use("/session", routes.session);

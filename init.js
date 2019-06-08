@@ -1,6 +1,7 @@
 // This Module is to be exported as a Side Effect
 import mongoose from "mongoose";
-import models from "./src/models";
+import bcrypt from "bcrypt";
+import Models from "./src/models";
 import conf from "./lib";
 
 // Initialize MongoDB
@@ -23,4 +24,28 @@ const initDbStartUp = async () => {
   }
 };
 
-export default initDbStartUp;
+const addAdmin = async () => {
+  try {
+    const admin = {
+      email: "jegedeakintunde@gmail.com",
+      password: "admin",
+      firstName: "akintunde",
+      lastName: "jegedeakintunde",
+      roles: "Admin"
+    };
+
+    const checkAdmin = await Models.UserModel.findOne({ email: admin.email });
+
+    if (!checkAdmin) {
+      const saltRounds = parseInt(conf.saltRounds,10)
+      admin.password = bcrypt.hashSync(admin.password, saltRounds);
+      await Models.UserModel(admin).save();
+    }
+
+    return;
+  } catch (error) {
+    Logger.error(error);
+  }
+};
+
+export { initDbStartUp, addAdmin };

@@ -16,7 +16,13 @@ const UsersSchema = new mongoose.Schema({
   lastName: {
     type: String,
     required: true
+  },
+  roles: {
+    type: String,
+    required: true
   }
 });
 
-module.exports = mongoose.model("Users", UsersSchema);
+const UserModel = mongoose.model("Users", UsersSchema);
+
+export default UserModel;
